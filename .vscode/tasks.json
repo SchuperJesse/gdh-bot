@@ -1,0 +1,20 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "build",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "Build (GDH-Bot)",
+			"detail": "npx tsc"
+		},
+		{
+			"type": "shell",
+			"command": "node",
+			"args": [ "build/index.js" ],
+			"label": "NodeJS: run (GDH-Bot)",
+			"problemMatcher":[]
+		}
+	]
+}
