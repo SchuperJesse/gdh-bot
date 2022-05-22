@@ -42,7 +42,7 @@ const auth = require("./auth.json");
 	// Create Skill Manager
 	const smgr = new SkillManager();
 
-	client.once('ready', ()=>
+	client.once('ready', () =>
 	{
 		console.log("Connected to Discord");
 		//TODO: Begin initialization after bot logs into discord
@@ -57,5 +57,10 @@ const auth = require("./auth.json");
 	{
 		console.error(err);
 		//TODO: do cleanup
+	});
+
+	client.on('messageReactionAdd', (reaction) =>
+	{
+		console.log(reaction);
 	});
 })();
