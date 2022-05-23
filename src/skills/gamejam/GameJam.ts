@@ -1,28 +1,31 @@
-import {SkillManager} from "../SkillManager";
+import {Skill} from "../Skill";
+import {SkillManager} from "../../SkillManager";
 import {Channel} from "discord.js";
 
 //================================================================
 
-export abstract class Skill {
-//protected:
-	protected _skillManager;
-
-	protected constructor(skillManager: SkillManager) {
-		this._skillManager = skillManager;
-	}
+export class GameJam extends Skill {
+//private:
 
 //public:
-	//----------------------------------------------------------------
-
-	abstract start(): void;
-
-	//----------------------------------------------------------------
-
-	abstract update(): void;
+	constructor(skillManager: SkillManager) {
+		super(skillManager);
+	}
 
 	//----------------------------------------------------------------
 
-	abstract stop(): void;
+	override start() {
+	}
+
+	//----------------------------------------------------------------
+
+	override update() {
+	}
+
+	//----------------------------------------------------------------
+
+	override stop() {
+	}
 
 	//----------------------------------------------------------------
 

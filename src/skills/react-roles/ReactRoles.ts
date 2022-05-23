@@ -1,28 +1,30 @@
-import {SkillManager} from "../SkillManager";
-import {Channel} from "discord.js";
+import {Skill} from "../Skill";
+import {SkillManager} from "../../SkillManager";
 
 //================================================================
 
-export abstract class Skill {
-//protected:
-	protected _skillManager;
-
-	protected constructor(skillManager: SkillManager) {
-		this._skillManager = skillManager;
-	}
+export class ReactRoles extends Skill {
+//private:
 
 //public:
-	//----------------------------------------------------------------
-
-	abstract start(): void;
-
-	//----------------------------------------------------------------
-
-	abstract update(): void;
+	constructor(skillManager: SkillManager) {
+		super(skillManager);
+	}
 
 	//----------------------------------------------------------------
 
-	abstract stop(): void;
+	override start() {
+	}
+
+	//----------------------------------------------------------------
+
+	override update() {
+	}
+
+	//----------------------------------------------------------------
+
+	override stop() {
+	}
 
 	//----------------------------------------------------------------
 

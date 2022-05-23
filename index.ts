@@ -1,5 +1,5 @@
-import {SkillManager} from "./src/skills";
-import {Client} from "discord.js";
+import {Client, MessageReaction, PartialMessageReaction, PartialUser, User} from "discord.js";
+import {SkillManager} from "./src/SkillManager";
 
 //NOTE: You will have to provide your own auth.json inside the /build/
 // in order to run the bot, I suggest creating a bot on your own server for testing.
@@ -40,16 +40,20 @@ const auth = require("./auth.json");
 	});
 
 	// Create Skill Manager
-	const smgr = new SkillManager();
+	const smgr = new SkillManager(client);
+
+	// Add atexit() listener - Stop and Cleanup before exiting
+	process.once('exit', () =>
+	{
+		smgr.stop();
+	});
 
 	client.once('ready', () =>
 	{
 		console.log("Connected to Discord");
 		//TODO: Begin initialization after bot logs into discord
+		smgr.start();
 	});
-
-	console.log(smgr);
-	console.log("Hello World");
 
 	// Login to Discord
 	client.login(auth['discord']['token'])
@@ -59,8 +63,9 @@ const auth = require("./auth.json");
 		//TODO: do cleanup
 	});
 
-	client.on('messageReactionAdd', (reaction) =>
+	client.on('messageReactionAdd', (reaction: MessageReaction | PartialMessageReaction, user: User | PartialUser) =>
 	{
-		console.log(reaction);
+		console.log(reaction,user);
 	});
+
 })();
