@@ -1,9 +1,10 @@
-import {Client} from "discord.js";
-import {Skill} from "./skills/Skill";
+import {Client, Guild} from "discord.js";
+import {Skill, TApplicationCommand} from "./skills/Skill";
 import {ReactRoles} from "./skills/react-roles/ReactRoles";
 import {Poll} from "./skills/poll/Poll";
 import {Royale} from "./skills/royale/Royale";
 import {GameJam} from "./skills/gamejam/GameJam";
+import {SlashCommandBuilder} from "@discordjs/builders";
 
 const fs = require("fs");
 
@@ -45,6 +46,26 @@ export class SkillManager {
 	stop() {
 		for (let skill in this.#skills) {
 			this.#skills[skill].stop();
+		}
+	}
+
+	registerCommands(guild: Guild) {
+		//TODO: Get slash commands from each skill
+		let commands: (TApplicationCommand)[] = [];
+
+		for (let skill in this.#skills) {
+			let cmd = this.#skills[skill].command;
+			if (cmd) { commands.push(cmd); }
+		}
+
+		//TODO: Register (set) commands
+		if (commands.length) {
+			guild.commands.set(commands)
+			.then(() =>
+			{
+				console.log(`Registered commands for guild: ${guild.name}`);
+			})
+			.catch(err => console.error(err));
 		}
 	}
 

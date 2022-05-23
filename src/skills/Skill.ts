@@ -1,5 +1,11 @@
 import {SkillManager} from "../SkillManager";
-import {Channel} from "discord.js";
+import {ApplicationCommand, ApplicationCommandData, ApplicationCommandOption, Channel} from "discord.js";
+import {SlashCommandBuilder} from "@discordjs/builders";
+import {APIApplicationCommand} from "discord-api-types/v9";
+
+//================================================================
+
+export type TApplicationCommand = ApplicationCommandData | APIApplicationCommand;
 
 //================================================================
 
@@ -23,6 +29,10 @@ export abstract class Skill {
 	//----------------------------------------------------------------
 
 	abstract stop(): void;
+
+	//----------------------------------------------------------------
+
+	get command(): TApplicationCommand | null { return null; }
 
 	//----------------------------------------------------------------
 

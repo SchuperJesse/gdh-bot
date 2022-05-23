@@ -1,5 +1,6 @@
-import {Client, MessageReaction, PartialMessageReaction, PartialUser, User} from "discord.js";
+import {ApplicationCommand, Client, MessageReaction, PartialMessageReaction, PartialUser, User} from "discord.js";
 import {SkillManager} from "./src/SkillManager";
+import {DBManager} from "./src/DBManager";
 
 //NOTE: You will have to provide your own auth.json inside the /build/
 // in order to run the bot, I suggest creating a bot on your own server for testing.
@@ -40,19 +41,37 @@ const auth = require("./auth.json");
 	});
 
 	// Create Skill Manager
-	const smgr = new SkillManager(client);
+	const skill_mgr = new SkillManager(client);
+	const db_mgr = new DBManager();
+	db_mgr.open();
 
 	// Add atexit() listener - Stop and Cleanup before exiting
 	process.once('exit', () =>
 	{
-		smgr.stop();
+		skill_mgr.stop();
+		db_mgr.close();
 	});
 
+	// Once bot logs in to Discord
 	client.once('ready', () =>
 	{
 		console.log("Connected to Discord");
+
+		// Update Caches
+		client.guilds.cache.forEach((guild) =>
+		{
+			// Remove all existing commands
+			guild.commands.set([])
+			.then(() =>
+			{
+				// Register all skill commands for this guild
+				skill_mgr.registerCommands(guild);
+			})
+			.catch(err => console.error(err));
+		});
+
 		//TODO: Begin initialization after bot logs into discord
-		smgr.start();
+		skill_mgr.start();
 	});
 
 	// Login to Discord
