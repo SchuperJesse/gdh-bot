@@ -1,4 +1,4 @@
-import {Client, Guild} from "discord.js";
+import {ApplicationCommandDataResolvable, Client, Guild} from "discord.js";
 import {Skill, TApplicationCommand} from "./skills/Skill";
 import {ReactRoles} from "./skills/react-roles/ReactRoles";
 import {Poll} from "./skills/poll/Poll";
@@ -10,7 +10,7 @@ const fs = require("fs");
 
 export class SkillManager {
 //private:
-	#client: Client;
+	readonly #client: Client;
 	readonly #skills: { [key: string]: Skill };
 
 //public:
@@ -50,15 +50,14 @@ export class SkillManager {
 	}
 
 	registerCommands(guild: Guild) {
-		//TODO: Get slash commands from each skill
+		// Build array of commands from each skill
 		let commands: (TApplicationCommand)[] = [];
-
 		for (let skill in this.#skills) {
 			let cmd = this.#skills[skill].command;
 			if (cmd) { commands.push(cmd); }
 		}
 
-		//TODO: Register (set) commands
+		// Set commands for guild
 		if (commands.length) {
 			guild.commands.set(commands)
 			.then(() =>
