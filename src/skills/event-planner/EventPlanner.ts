@@ -1,54 +1,36 @@
 import {Skill, TApplicationCommand} from "../Skill";
 import {SkillManager} from "../../SkillManager";
-import {EmbedBuilder, roleMention, SlashCommandBuilder} from "@discordjs/builders";
-import {Channel, Interaction, Message, PartialMessage, PartialMessageReaction} from "discord.js";
 
 //================================================================
 
-export class Royale extends Skill {
-//private:
-
-//public:
+export class EventPlanner extends Skill {
 	constructor(skillManager: SkillManager) {
 		super(skillManager);
 	}
 
 	//----------------------------------------------------------------
 
-	override start() {
+	override start(): void {
 	}
 
 	//----------------------------------------------------------------
 
-	override update() {
+	override update(): void {
 	}
 
 	//----------------------------------------------------------------
 
-	override stop() {
+	override stop(): void {
 	}
 
 	//----------------------------------------------------------------
 
 	override get commands(): TApplicationCommand | null {
-		return {
-			name: "royale",
-			description: "Royale Challenge Command!"
-		};
+		return null;
 	}
 
 	//----------------------------------------------------------------
 
-	getHelp(message: Message | PartialMessage) {
-		let embed = new EmbedBuilder();
-		message.reply({ embeds: [ embed.data ]})
-		.catch(err => console.error(err));
-	}
-
-	//----------------------------------------------------------------
-
-	onInteractionCreate(interaction: Interaction) {
-	}
 }
 
 //================================================================

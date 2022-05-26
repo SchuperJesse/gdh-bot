@@ -1,0 +1,7 @@
+CREATE TABLE guilds (
+	id			INTEGER PRIMARY KEY AUTOINCREMENT,
+	guild_type	INTEGER NOT NULL
+				DEFAULT (0),
+	guild_id	TEXT	UNIQUE ON CONFLICT FAIL,
+	guild_name	TEXT
+);

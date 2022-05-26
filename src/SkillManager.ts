@@ -53,7 +53,7 @@ export class SkillManager {
 		// Build array of commands from each skill
 		let commands: (TApplicationCommand)[] = [];
 		for (let skill in this.#skills) {
-			let cmd = this.#skills[skill].command;
+			let cmd = this.#skills[skill].commands;
 			if (cmd) { commands.push(cmd); }
 		}
 

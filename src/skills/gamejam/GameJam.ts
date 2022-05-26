@@ -1,4 +1,4 @@
-import {Skill} from "../Skill";
+import {Skill, TApplicationCommand} from "../Skill";
 import {SkillManager} from "../../SkillManager";
 import {Channel} from "discord.js";
 
@@ -29,6 +29,20 @@ export class GameJam extends Skill {
 
 	//----------------------------------------------------------------
 
+	override get commands(): TApplicationCommand | null {
+		return null;
+		// return {
+		// 	name: "jam",
+		// 	description: "Game Jam",
+		// 	options: [
+		// 		require('./cmds/create.json'),
+		// 		require('./cmds/remove.json'),
+		// 		require('./cmds/start.json'),
+		// 		require('./cmds/stop.json'),
+		// 		require('./cmds/update.json')
+		// 	]
+		// }
+	}
 }
 
 //================================================================

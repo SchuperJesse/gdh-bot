@@ -1,4 +1,12 @@
-import {ApplicationCommand, Client, MessageReaction, PartialMessageReaction, PartialUser, User} from "discord.js";
+import {
+	ApplicationCommand,
+	Client,
+	Interaction,
+	MessageReaction, NewsChannel,
+	PartialMessageReaction,
+	PartialUser, TextChannel,
+	User
+} from "discord.js";
 import {SkillManager} from "./src/SkillManager";
 import {DBManager} from "./src/DBManager";
 
@@ -43,7 +51,6 @@ const auth = require("./auth.json");
 	// Create Skill Manager
 	const skill_mgr = new SkillManager(client);
 	const db_mgr = new DBManager();
-	db_mgr.open();
 
 	// Add atexit() listener - Stop and Cleanup before exiting
 	process.once('exit', () =>
@@ -82,9 +89,81 @@ const auth = require("./auth.json");
 		//TODO: do cleanup
 	});
 
-	client.on('messageReactionAdd', (reaction: MessageReaction | PartialMessageReaction, user: User | PartialUser) =>
-	{
-		console.log(reaction,user);
+	client.on('channelCreate', (channel)=>{});
+	client.on('channelDelete', (channel)=>{});
+	client.on('channelUpdate', (oldChannel, newChannel)=>{});
+	client.on('channelPinsUpdate', (channel, data)=>{});
+
+	client.on('emojiCreate', (emoji)=>{});
+	client.on('emojiDelete', (emoji)=>{});
+	client.on('emojiUpdate', (oldEmoji, newEmoji)=>{});
+
+	client.on('guildBanAdd', (ban)=>{});
+	client.on('guildBanRemove', (ban)=>{});
+	client.on('guildCreate', (guild)=>{});
+	client.on('guildDelete', (guild)=>{});
+	client.on('guildUnavailable', (guild)=>{});
+	client.on('guildIntegrationsUpdate', (guild)=>{});
+	client.on('guildMemberAdd', (member)=>{});
+	client.on('guildMemberAvailable', (member)=>{});
+	client.on('guildMemberRemove', (member)=>{});
+	client.on('guildMembersChunk', (members, guild, data)=>{});
+	client.on('guildMemberUpdate', (oldMember, newMember)=>{});
+	client.on('guildUpdate', (oldGuild, newGuild)=>{});
+
+	client.on('inviteCreate', (invite)=>{});
+	client.on('inviteDelete', (invite)=>{});
+
+	client.on('messageCreate', (message) => {
+		if (message.author.bot) return;
 	});
+
+	client.on('messageDelete', (message)=>{});
+	client.on('messageReactionRemoveAll', (message, reactions)=>{});
+	client.on('messageReactionRemoveEmoji', (reaction)=>{});
+	client.on('messageDeleteBulk', (messages)=>{});
+	client.on('messageReactionAdd', (reaction, user)=>{});
+	client.on('messageReactionRemove', (reaction, user)=>{});
+	client.on('messageUpdate', (oldMessage, newMessage)=>{});
+
+	client.on('presenceUpdate', (oldPresence, newPresence)=>{});
+
+	client.on('roleCreate', (role)=>{});
+	client.on('roleDelete', (role)=>{});
+	client.on('roleUpdate', (oldRole, newRole)=>{});
+
+	client.on('threadCreate', (thread, newlyCreated)=>{});
+	client.on('threadDelete', (thread)=>{});
+	client.on('threadListSync', (threads)=>{});
+	client.on('threadMemberUpdate', (oldMember, newMember)=>{});
+	client.on('threadMembersUpdate', (oldMembers, newMembers)=>{});
+	client.on('threadUpdate', (oldThread, newThread)=>{});
+
+	client.on('userUpdate', (oldUser, newUser)=>{});
+
+	client.on('voiceStateUpdate', (oldState, newState)=>{});
+	client.on('webhookUpdate', (channel)=>{});
+
+	client.on('interactionCreate', (interaction)=>{});
+
+	client.on('shardDisconnect', (closeEvent, shardId)=>{});
+	client.on('shardError', (error, shardId)=>{});
+	client.on('shardReady', (shardId, unavailableGuilds)=>{});
+	client.on('shardReconnecting', (shardId)=>{});
+	client.on('shardResume', (shardId, replayedEvents)=>{});
+
+	client.on('stageInstanceCreate', (stageInstance)=>{});
+	client.on('stageInstanceUpdate', (oldStage, newStage)=>{});
+	client.on('stageInstanceDelete', (stageInstance)=>{});
+
+	client.on('stickerCreate', (sticker)=>{});
+	client.on('stickerDelete', (sticker)=>{});
+	client.on('stickerUpdate', (oldSticker, newSticker)=>{});
+
+	client.on('guildScheduledEventCreate', (scheduledEvent)=>{});
+	client.on('guildScheduledEventUpdate', (oldScheduledEvent, newScheduledEvent)=>{});
+	client.on('guildScheduledEventDelete', (scheduledEvent)=>{});
+	client.on('guildScheduledEventUserAdd', (scheduledEvent, user)=>{});
+	client.on('guildScheduledEventUserRemove', (scheduledEvent, user)=>{});
 
 })();

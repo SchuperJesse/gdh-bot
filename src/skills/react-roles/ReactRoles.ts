@@ -1,4 +1,6 @@
-import {Skill} from "../Skill";
+import * as fs from "fs";
+import * as path from "path";
+import {Skill, TApplicationCommand} from "../Skill";
 import {SkillManager} from "../../SkillManager";
 
 //================================================================
@@ -27,6 +29,17 @@ export class ReactRoles extends Skill {
 	}
 
 	//----------------------------------------------------------------
+
+	override get commands(): TApplicationCommand | null {
+		return {
+			name: "rr",
+			description: "React Roles",
+			options: [
+				require('../../../../cmds/react-roles/set.json'),
+				require('../../../../cmds/react-roles/remove.json')
+			]
+		};
+	}
 
 }
 
