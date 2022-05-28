@@ -1,7 +1,7 @@
-import {Skill, TApplicationCommand, TEventResult} from "../Skill";
+import {EEventCode, Skill, TApplicationCommand, TEventResult} from "../Skill";
 import {SkillManager} from "../../SkillManager";
-import {EmbedBuilder, roleMention, SlashCommandBuilder} from "@discordjs/builders";
-import {Channel, Interaction, Message, PartialMessage, PartialMessageReaction} from "discord.js";
+import {EmbedBuilder} from "@discordjs/builders";
+import {CacheType, Channel, Interaction, Message, PartialMessage, PartialMessageReaction} from "discord.js";
 
 //================================================================
 
@@ -16,6 +16,7 @@ export class Royale extends Skill {
 	//----------------------------------------------------------------
 
 	override start() {
+		this._skillManager.addEventListener('interactionCreate', this.onInteractionCreate);
 	}
 
 	//----------------------------------------------------------------
@@ -47,8 +48,8 @@ export class Royale extends Skill {
 
 	//----------------------------------------------------------------
 
-	override onInteractionCreate(interaction: Interaction): TEventResult {
-		return null;
+	override onInteractionCreate(interaction: Interaction) {
+		return EEventCode.IGNORED;
 	}
 }
 

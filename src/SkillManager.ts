@@ -1,27 +1,50 @@
-import {ApplicationCommandDataResolvable, Client, ClientEvents, Guild} from "discord.js";
-import {Skill, TApplicationCommand} from "./skills/Skill";
+import {Client, ClientEvents, Guild} from "discord.js";
+import {Skill, TApplicationCommand, TEventResult} from "./skills/Skill";
 import {ReactRoles} from "./skills/react-roles/ReactRoles";
 import {Poll} from "./skills/poll/Poll";
 import {Royale} from "./skills/royale/Royale";
 import {GameJam} from "./skills/gamejam/GameJam";
-import {SlashCommandBuilder} from "@discordjs/builders";
+import * as crypto from "crypto";
 
-const fs = require("fs");
-
-export class EventListener {
-	name: string;
-	constructor(eventName: string) {
-		this.name = eventName;
-	}
-}
+//================================================================
 
 export type TCallback = (...args: any) => void;
+export type TEventListener = (...args: any) => TEventResult;
+
+//================================================================
+
+export class EventListener {
+//private:
+	readonly #uid: string;
+	readonly #name: string;
+//public:
+	callback: TEventListener;
+//public:
+	constructor(uid: string, eventName: string, callback: TEventListener) {
+		this.#uid = uid;
+		this.#name = eventName;
+		this.callback = callback;
+	}
+
+	//----------------------------------------------------------------
+
+	get uid() { return this.#uid; }
+
+	//----------------------------------------------------------------
+
+	get name() { return this.#name; }
+
+	//----------------------------------------------------------------
+
+}
+
+//================================================================
 
 export class SkillManager {
 //private:
 	readonly #client: Client;
 	readonly #skills: { [key: string]: Skill };
-	readonly #events: { [key:string]: TCallback };
+	readonly #events: { [key: string]: EventListener[] };
 
 //public:
 	constructor(client: Client) {
@@ -31,9 +54,15 @@ export class SkillManager {
 		this.#events = {};
 	}
 
+	//----------------------------------------------------------------
+
 	get client() { return this.#client; }
 
+	//----------------------------------------------------------------
+
 	get skills() { return this.#skills; }
+
+	//----------------------------------------------------------------
 
 	loadSkills() {
 		this.#skills['react_roles'] = new ReactRoles(this);
@@ -42,11 +71,15 @@ export class SkillManager {
 		this.#skills['game_jam'] = new GameJam(this);
 	}
 
+	//----------------------------------------------------------------
+
 	start() {
 		for (let skill in this.#skills) {
 			this.#skills[skill].start();
 		}
 	}
+
+	//----------------------------------------------------------------
 
 	update() {
 		for (let skill in this.#skills) {
@@ -54,11 +87,15 @@ export class SkillManager {
 		}
 	}
 
+	//----------------------------------------------------------------
+
 	stop() {
 		for (let skill in this.#skills) {
 			this.#skills[skill].stop();
 		}
 	}
+
+	//----------------------------------------------------------------
 
 	registerCommands(guild: Guild) {
 		// Build array of commands from each skill
@@ -77,17 +114,46 @@ export class SkillManager {
 			})
 			.catch(err => console.error(err));
 		}
-		this.addEventListener('interactionCreate', (interaction) =>
-		{
-
-		});
-		this.emit('debug', 'Test');
 	}
 
-	addEventListener<K extends keyof ClientEvents>(name: K, listener: (...args: ClientEvents[K]) => void) {
+	//----------------------------------------------------------------
+
+	addEventListener(name: keyof ClientEvents, listener: TEventListener) {
+		if (!(name in this.#events)) {
+			this.#events[name] = [];
+		}
+		this.#events[name].push(new EventListener(
+			name,
+			crypto.randomUUID(),
+			listener
+		));
 	}
+
+	//----------------------------------------------------------------
+
+	removeEventListener(listener: EventListener) {
+		if (listener.name in this.#events) {
+			for (let i = 0; i < this.#events[listener.name].length; ++i) {
+				if (this.#events[listener.name][i].uid === listener.uid) {
+					this.#events[listener.name].splice(i, 1);
+				}
+			}
+		}
+	}
+
+	//----------------------------------------------------------------
 
 	emit<K extends keyof ClientEvents>(eventName: K, ...args: ClientEvents[K]) {
-		
+		let result = null;
+		if (eventName in this.#events) {
+			for (let listener of this.#events[eventName]) {
+				result = listener.callback(...args);
+			}
+		}
 	}
+
+	//----------------------------------------------------------------
+
 }
+
+//================================================================
