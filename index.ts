@@ -116,6 +116,7 @@ const auth = require("./auth.json");
 
 	client.on('messageCreate', (message) => {
 		if (message.author.bot) return;
+		message.channel.send({content:`Hello <@!${message.author.id}0>! You're awesome ${message.author.id}!`, allowedMentions:{ users: [message.author.id] }});
 	});
 
 	client.on('messageDelete', (message)=>{});
@@ -144,7 +145,9 @@ const auth = require("./auth.json");
 	client.on('voiceStateUpdate', (oldState, newState)=>{});
 	client.on('webhookUpdate', (channel)=>{});
 
-	client.on('interactionCreate', (interaction)=>{});
+	client.on('interactionCreate', (interaction)=>
+	{
+	});
 
 	client.on('shardDisconnect', (closeEvent, shardId)=>{});
 	client.on('shardError', (error, shardId)=>{});

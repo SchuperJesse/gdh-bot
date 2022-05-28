@@ -1,4 +1,4 @@
-import {Skill, TApplicationCommand} from "../Skill";
+import {Skill, TApplicationCommand, TEventResult} from "../Skill";
 import {SkillManager} from "../../SkillManager";
 import {EmbedBuilder, roleMention, SlashCommandBuilder} from "@discordjs/builders";
 import {Channel, Interaction, Message, PartialMessage, PartialMessageReaction} from "discord.js";
@@ -47,7 +47,8 @@ export class Royale extends Skill {
 
 	//----------------------------------------------------------------
 
-	onInteractionCreate(interaction: Interaction) {
+	override onInteractionCreate(interaction: Interaction): TEventResult {
+		return null;
 	}
 }
 

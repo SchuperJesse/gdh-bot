@@ -1,4 +1,4 @@
-import {ApplicationCommandDataResolvable, Client, Guild} from "discord.js";
+import {ApplicationCommandDataResolvable, Client, ClientEvents, Guild} from "discord.js";
 import {Skill, TApplicationCommand} from "./skills/Skill";
 import {ReactRoles} from "./skills/react-roles/ReactRoles";
 import {Poll} from "./skills/poll/Poll";
@@ -8,16 +8,27 @@ import {SlashCommandBuilder} from "@discordjs/builders";
 
 const fs = require("fs");
 
+export class EventListener {
+	name: string;
+	constructor(eventName: string) {
+		this.name = eventName;
+	}
+}
+
+export type TCallback = (...args: any) => void;
+
 export class SkillManager {
 //private:
 	readonly #client: Client;
 	readonly #skills: { [key: string]: Skill };
+	readonly #events: { [key:string]: TCallback };
 
 //public:
 	constructor(client: Client) {
 		this.#client = client;
 		this.#skills = {};
 		this.loadSkills();
+		this.#events = {};
 	}
 
 	get client() { return this.#client; }
@@ -66,6 +77,17 @@ export class SkillManager {
 			})
 			.catch(err => console.error(err));
 		}
+		this.addEventListener('interactionCreate', (interaction) =>
+		{
+
+		});
+		this.emit('debug', 'Test');
 	}
 
+	addEventListener<K extends keyof ClientEvents>(name: K, listener: (...args: ClientEvents[K]) => void) {
+	}
+
+	emit<K extends keyof ClientEvents>(eventName: K, ...args: ClientEvents[K]) {
+		
+	}
 }
