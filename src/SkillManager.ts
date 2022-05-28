@@ -1,5 +1,5 @@
 import {Client, ClientEvents, Guild} from "discord.js";
-import {Skill, TApplicationCommand, TEventResult} from "./skills/Skill";
+import {EEventCode, Skill, TApplicationCommand, TEventResult} from "./skills/Skill";
 import {ReactRoles} from "./skills/react-roles/ReactRoles";
 import {Poll} from "./skills/poll/Poll";
 import {Royale} from "./skills/royale/Royale";
@@ -148,6 +148,7 @@ export class SkillManager {
 		if (eventName in this.#events) {
 			for (let listener of this.#events[eventName]) {
 				result = listener.callback(...args);
+				if (result !== EEventCode.IGNORED) break;
 			}
 		}
 	}
