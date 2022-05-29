@@ -1,4 +1,4 @@
-import {Skill, TApplicationCommand, TEventResult} from "../Skill";
+import {EEventCode, Skill, TApplicationCommand, TEventResult} from "../Skill";
 import {SkillManager} from "../../SkillManager";
 import { Channel, Interaction, CacheType, Message, WebSocketShard } from "discord.js";
 
@@ -43,14 +43,8 @@ export class Ping extends Skill {
 
 	// Find out how to get ms response for message sent by bot
 
-	override onInteractionCreate(interaction: Interaction): TEventResult {
-		if (!interaction.isCommand()) return;
-
-		const { commandName } = interaction;
-
-		if (commandName === 'ping'){
-			interaction.reply('Pong');
-		}
+	override onInteractionCreate(interaction: Interaction) {
+		return EEventCode.IGNORED
 	}
 
 }
