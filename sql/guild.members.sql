@@ -1,0 +1,6 @@
+CREATE TABLE members (
+	id					INTEGER PRIMARY KEY AUTOINCREMENT,
+	join_date			DATETIME,
+	user_id				TEXT UNIQUE ON CONFLICT FAIL,
+	flags				TEXT
+);

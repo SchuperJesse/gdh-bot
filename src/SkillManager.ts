@@ -5,6 +5,7 @@ import {Poll} from "./skills/poll/Poll";
 import {Royale} from "./skills/royale/Royale";
 import {GameJam} from "./skills/gamejam/GameJam";
 import * as crypto from "crypto";
+import {DBManager} from "./DBManager";
 
 //================================================================
 
@@ -45,13 +46,15 @@ export class SkillManager {
 	readonly #client: Client;
 	readonly #skills: { [key: string]: Skill };
 	readonly #events: { [key: string]: EventListener[] };
+	readonly #db: DBManager;
 
 //public:
 	constructor(client: Client) {
 		this.#client = client;
 		this.#skills = {};
-		this.loadSkills();
 		this.#events = {};
+		this.#db = new DBManager();
+		this.loadSkills();
 	}
 
 	//----------------------------------------------------------------
@@ -61,6 +64,10 @@ export class SkillManager {
 	//----------------------------------------------------------------
 
 	get skills() { return this.#skills; }
+
+	//----------------------------------------------------------------
+
+	get db() { return this.#db; }
 
 	//----------------------------------------------------------------
 
@@ -108,13 +115,23 @@ export class SkillManager {
 		// Set commands for guild
 		if (commands.length) {
 			guild.commands.set(commands)
-			.then(() =>
+			.then((cmds) =>
 			{
+				//console.log(cmds);
 				console.log(`Registered commands for guild: ${guild.name}`);
 			})
 			.catch(err => console.error(err));
 		}
 	}
+
+	//----------------------------------------------------------------
+
+	initializeGuild(guild: Guild) {
+		for (let skill in this.#skills) {
+			this.#skills[skill].initializeGuild(guild);
+		}
+	}
+
 
 	//----------------------------------------------------------------
 

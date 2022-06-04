@@ -56,7 +56,7 @@ const auth = require("./auth.json");
 	process.once('exit', () =>
 	{
 		skill_mgr.stop();
-		db_mgr.close();
+		db_mgr.closeAll();
 	});
 
 	// Once bot logs in to Discord
@@ -66,70 +66,15 @@ const auth = require("./auth.json");
 		// Update Caches
 		client.guilds.cache.forEach((guild) =>
 		{
+			// Initialize the guild (startup database(s))
+			skill_mgr.initializeGuild(guild);
+
 			// Remove all existing commands
 			guild.commands.set([])
 			.then(() =>
 			{
 				// Register all skill commands for this guild
 				skill_mgr.registerCommands(guild);
-				// let devchat = guild.channels.cache.get('978005365474082866');
-				// if (devchat && devchat.type === 'GUILD_TEXT') {
-				// 	let buttons = new MessageActionRow();
-				// 	buttons.addComponents([
-				// 		new MessageButton({
-				// 			style: "PRIMARY",
-				// 			label: "Artist",
-				// 			emoji: '🎨',
-				// 			customId: 'custom-id-artist'
-				// 		}),
-				// 		new MessageButton({
-				// 			style: "PRIMARY",
-				// 			label: "Musician",
-				// 			emoji: '🎶',
-				// 			customId: 'custom-id-musician'
-				// 		}),
-				// 		new MessageButton({
-				// 			style: "SECONDARY",
-				// 			label: "Spectator",
-				// 			emoji: '👀',
-				// 			customId: 'custom-id-spectator'
-				// 		})
-				// 	]);
-				// 	let dropdown = new MessageActionRow();
-				// 	dropdown.addComponents([
-				// 		new MessageSelectMenu({
-				// 			options: [
-				// 				{
-				// 					label: "Spectator",
-				// 					value: "spectator",
-				// 					default: true
-				// 				},
-				// 				{
-				// 					label: "Artist",
-				// 					value: "artist"
-				// 				},
-				// 				{
-				// 					label: "Musician",
-				// 					value: "musician"
-				// 				},
-				// 				{
-				// 					label: "Programmer",
-				// 					value: "programmer"
-				// 				},
-				// 				{
-				// 					label: "Designer",
-				// 					value: "designer"
-				// 				}
-				// 			],
-				// 			customId: 'custom-id-select-menu'
-				// 		})
-				// 	]);
-				// 	devchat.send({
-				// 		content: 'Select a Role Mofo!',
-				// 		allowedMentions: { users: [], roles: [] },
-				// 		components: [ dropdown, buttons ]
-				// 	});
-				// }
 			})
 			.catch(err => console.error(err));
 		});
@@ -230,41 +175,11 @@ const auth = require("./auth.json");
 
 	// Interactions (Application Commands, Buttons, Message Components)
 	client.on('interactionCreate', (interaction) => {
+		if (interaction.isMessageComponent()) {
+			interaction.deferUpdate({})
+			.catch(err => console.error(err));
+		}
 		skill_mgr.emit('interactionCreate', interaction);
-		// if (interaction.isButton()) {
-		// 	let title = '';
-		// 	switch (interaction.customId) {
-		// 		case 'custom-id-artist': title = 'Artist'; break;
-		// 		case 'custom-id-musician': title = 'Musician'; break;
-		// 		case 'custom-id-spectator': title = 'Spectator'; break;
-		// 		default: title = 'Unknown'; break;
-		// 	}
-		// 	interaction.reply({ content: "test", ephemeral: true })
-		// 	.then(()=>{
-		// 		setTimeout(()=>{
-		// 			interaction.editReply({
-		// 				content: "Test"
-		// 			}).catch(err => console.error(err));
-		// 		}, 3000);
-		// 	})
-		// 	.catch(err => console.error(err));
-		// 	return;
-		// }
-		// if (interaction.isSelectMenu()) {
-		// 	interaction.deferUpdate().catch(err => console.error());
-		// 	return;
-		// }
-		// if (interaction.isRepliable()) {
-		// 	interaction.deferReply().catch(err => console.error(err));
-		// }
-		// if (interaction.isMessageComponent()) {
-		// 	setTimeout(() =>
-		// 	{
-		// 		if (!interaction.replied) {
-		// 			interaction.deferUpdate().catch(err=> console.error(err));
-		// 		}
-		// 	}, 2500);
-		// }
 	});
 
 	// Shards (Bot Instances)

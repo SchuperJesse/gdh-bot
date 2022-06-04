@@ -1,0 +1,27 @@
+{
+	"type": 1,
+	"name": "create",
+	"description": "Create a Royale Challenge",
+	"options": [
+		{
+			"type": 4,
+			"name": "mode",
+			"description": "Select a Challenge Mode",
+			"choices": [
+				{
+					"name": "Weekly Royale",
+					"value": 1
+				},
+				{
+					"name": "Monthly Royale",
+					"value": 2
+				},
+				{
+					"name": "Yearly Royale",
+					"value": 3
+				}
+			],
+			"required": true
+		}
+	]
+}

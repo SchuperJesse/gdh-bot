@@ -1,4 +1,4 @@
-import {Guild, Snowflake, User} from "discord.js";
+import {Guild, Message, Snowflake, User} from "discord.js";
 
 export type BasicTypes = null | boolean | number | string;
 export type JSONTypes = (BasicTypes | JSONTypes)[] | {[key:string]: (BasicTypes | JSONTypes)};
